@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Countdown Timer</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* COLOR THEME */
+
+:root{
+--bg-gradient: linear-gradient(135deg,#ff2d95,#8e2de2,#4facfe);
+--card:#f5f5f5;
+--primary:#ff2d95;
+--btn:#8e2de2;
+--text:#222;
+}
+
+/* RESET */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+/* BODY */
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:var(--bg-gradient);
+color:var(--text);
+padding:20px;
+background-size:300% 300%;
+animation:gradientMove 8s ease infinite;
+}
+
+@keyframes gradientMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* CONTAINER */
+
+.timer-container{
+background:var(--card);
+padding:35px;
+border-radius:15px;
+width:420px;
+max-width:95%;
+box-shadow:0 10px 30px rgba(0,0,0,0.25);
+display:flex;
+flex-direction:column;
+gap:20px;
+text-align:center;
+}
+
+/* TITLE */
+
+.timer-container h1{
+color:var(--primary);
+}
+
+/* INPUT */
+
+input{
+padding:12px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:16px;
+width:100%;
+}
+
+/* BUTTONS */
+
+.controls{
+display:flex;
+gap:10px;
+}
+
+button{
+flex:1;
+padding:12px;
+border:none;
+border-radius:8px;
+background:var(--btn);
+color:white;
+font-size:16px;
+cursor:pointer;
+transition:0.2s;
+}
+
+button:hover{
+opacity:0.9;
+}
+
+/* TIMER DISPLAY */
+
+#countdown{
+font-size:30px;
+font-weight:600;
+letter-spacing:2px;
+}
+
+/* MOBILE */
+
+@media(max-width:500px){
+
+.timer-container{
+padding:25px;
+}
+
+#countdown{
+font-size:22px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="timer-container">
+
+<h1>COUNTDOWN TIMER</h1>
+
+<input type="number" id="minutes" placeholder="Enter minutes">
+
+<div class="controls">
+<button onclick="startTimer()">Start</button>
+<button onclick="pauseTimer()">Pause</button>
+<button onclick="resetTimer()">Reset</button>
+</div>
+
+<div id="countdown">00:00</div>
+
+</div>
+
+<script>
+
+let timer;
+let totalSeconds = 0;
+let isRunning = false;
+
+function startTimer(){
+
+let minutes = document.getElementById("minutes").value;
+
+if(!isRunning){
+
+if(totalSeconds === 0){
+if(minutes === "") return;
+totalSeconds = minutes * 60;
+}
+
+timer = setInterval(updateTimer,1000);
+isRunning = true;
+
+}
+
+}
+
+function updateTimer(){
+
+if(totalSeconds <= 0){
+clearInterval(timer);
+document.getElementById("countdown").textContent="Time's Up!";
+isRunning = false;
+return;
+}
+
+let min = Math.floor(totalSeconds / 60);
+let sec = totalSeconds % 60;
+
+document.getElementById("countdown").textContent =
+String(min).padStart(2,"0")+":"+String(sec).padStart(2,"0");
+
+totalSeconds--;
+
+}
+
+function pauseTimer(){
+clearInterval(timer);
+isRunning = false;
+}
+
+function resetTimer(){
+clearInterval(timer);
+totalSeconds = 0;
+isRunning = false;
+document.getElementById("countdown").textContent="00:00";
+document.getElementById("minutes").value="";
+}
+
+</script>
+
+</body>
+</html>
